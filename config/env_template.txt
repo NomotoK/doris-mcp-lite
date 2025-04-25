@@ -1,0 +1,13 @@
+# .env
+# 数据库连接
+DB_HOST=localhost
+DB_PORT=9030
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=your_database_name
+
+# MCP 服务器名称
+MCP_SERVER_NAME=DorisAnalytics
+
+# 其他可能的配置项
+DEBUG=true
