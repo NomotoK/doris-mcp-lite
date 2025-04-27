@@ -1,6 +1,6 @@
 import pymysql
 from pymysql.cursors import DictCursor
-from config import DB_CONFIG
+from doris_mcp_server.config import DB_CONFIG
 
 
 class DorisConnector:
