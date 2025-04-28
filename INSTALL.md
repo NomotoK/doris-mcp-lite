@@ -139,7 +139,9 @@ During setup, you will be asked to provide:
 |DB_NAME|Target database name|analytics_db|
 |MCP_SERVER_NAME|Name of your MCP Server|DorisAnalytics|
 |DEBUG|Enable debug mode (true/false)|true|
-All values are entered interactively, with sensible defaults provided where possible.
+
+
+- All values are entered interactively, with sensible defaults provided where possible.
 
 ## **⚙️ After Setup**
 
