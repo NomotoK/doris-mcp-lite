@@ -14,6 +14,12 @@ def query_table_overview(table_name: str) -> str:
         f"\n确保格式清晰，使用表格展示内容。"
     )
 
+@mcp.prompt(name = "table_comment_overview", description = "查看表的注释信息")
+def query_table_comment(table_name: str) -> str:
+    """
+    查看表格的注释信息
+    """
+    return f"请查询 `{table_name}` 表的注释信息，这些信息用于描述表的用途。"
 
 # 2. 汇总统计模板
 @mcp.prompt()
