@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "doris-mcp-server"
 version = "0.0.1"
-description = "Add your description here"
+description = "An MCP server for analytics on Apache Doris database."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -12,5 +16,12 @@ dependencies = [
     "pymysql>=1.1.1",
 ]
 
+[project.urls]
+Homepage = "https://github.com/NomotoK/doris-mcp-server"
+Repository = "https://github.com/NomotoK/doris-mcp-server"
+
 [project.scripts]
 server = "doris_mcp_server.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
