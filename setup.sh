@@ -128,7 +128,7 @@ echo "✅ Successfully updated .env at: $ENV_FILE"
 
 echo ""
 echo "🚀 Setup complete!"
-echo "You can now start the MCP server with:"
+echo "You can now start the MCP server and test database connection with:"
 echo "   server"
 echo "or"
 echo "   python -m doris_mcp_server.server"
