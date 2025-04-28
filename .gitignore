@@ -176,4 +176,5 @@ cython_debug/
 .DS_Store
 .env
 *.egg-info/
-*.venv
+*.venv/
+*.dist/
