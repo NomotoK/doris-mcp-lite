@@ -22,11 +22,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 1. **Download `setup.sh` on your machine.**
 
 2. **Make the script executable:**
+
 ```bash
 chmod +x setup.sh
 ```
 
 3. Run the script:
+
 ```bash
 ./setup.sh
 ```
