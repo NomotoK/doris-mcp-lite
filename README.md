@@ -37,11 +37,13 @@ This is the easiest way to install. Please copy the `setup.sh`  file in project 
 
 1. Copy the `setup.sh` to local.
 2. Make the script executable:
+
 ```bash
 chmod +x setup.sh
 ```
 
 3. Run the script:
+
 ```bash
 ./setup.sh
 ```
@@ -62,18 +64,21 @@ pip install doris-mcp-server
 > **Recommended if you want to modify the server**
 
 1. Fork and clone the repository:
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/doris-mcp-server.git
 cd doris-mcp-server
 ```
 
-2. Set up a local Python environment using [uv](https://github.com/astral-sh/uv):
+1. Set up a local Python environment using [uv](https://github.com/astral-sh/uv):
+
 ```bash
 uv venv
 uv pip install -e .
 ```
 
-3. Add this server to your LLM client or Run the server:
+1. Add this server to your LLM client or Run the server:
+
 ```bash
 uv run server
 ```
@@ -139,12 +144,13 @@ DEBUG=false
 To connect this server to an MCP-compatible client (e.g., Claude Desktop, CherryStudio, Cline), you need to modify your MCP client configuration JSON.
 
 Example if you are using CherryStudio:
+
 - name: doris-mcp-server
 - type: stdio
 - command: absolute/path/to/your/uv
 - arguments:
 
-```
+```bash
 --directory
 /Users/hailin/dev/Doris-MCP-Server
 run
@@ -204,8 +210,10 @@ If you are installing with source code or using `setup.sh`:
 
 For more information on how to configure your client, please refer to :
 
-[For Server Developers - Model Context Protocol](https://modelcontextprotocol.io/quickstart/server)
-[配置和使用 MCP \| CherryStudio](https://docs.cherry-ai.com/advanced-basic/mcp/config)
+[For Server Developers - Model Context Protocol - Claude](https://modelcontextprotocol.io/quickstart/server)
+
+
+[配置和使用 MCP | CherryStudio](https://docs.cherry-ai.com/advanced-basic/mcp/config)
 
 ✅ Now your LLM client will discover Doris Analytics tools, prompts, and resources through the MCP server.
 
@@ -218,16 +226,19 @@ For more information on how to configure your client, please refer to :
 Before you start, you can run the `test.py` in the project `src/doris-mcp-server` directory to directly call the MCP Server functional interface to test resources, tools, etc. without using LLM (such as Claude, GPT, etc. models). You can control what functions to test by passing arguments through the command line.
 
 Test all resources exposed by the server:
+
 ```bash
 python test.py --server server.py --test resources
 ```
 
 or test all the tools provided by the server:
+
 ```bash
 python test.py --server server.py --test tools
 ```
 
 or test all functions of resources, tools, and prompt words at one time:
+
 ```bash
 python test.py --server server.py --test all
 ```
@@ -235,11 +246,13 @@ python test.py --server server.py --test all
 ### **Testing Database connection and run server**
 
 Launch the MCP server by running the command:
+
 ```bash
 server
 ```
 
 Or manually:
+
 ```bash
 python -m doris_mcp_server.server
 ```
