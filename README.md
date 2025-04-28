@@ -33,9 +33,9 @@ We recommend using [uv](https://docs.astral.sh/uv/) to manage your Python enviro
 
 > **Recommended for server deployment**
 
-This is the easiest way to install. Please copy the `setup.sh`  file in project and run it locally. For more information please refer: [Doris MCP install guide](INSTALL.md)
+This is the easiest way to install. Please copy the [`setup.sh`](setup.sh)  file in project and run it locally. For more information please refer: [Doris MCP install guide](INSTALL.md)
 
-1. Copy the `setup.sh` to local.
+1. Copy the [`setup.sh`](setup.sh) to local.
 2. Make the script executable:
 
 ```bash
@@ -186,7 +186,7 @@ Alternatively, if you prefer a more robust form:
 }
 ```
 
-If you are installing with source code or using `setup.sh`:
+If you are installing with source code or using [`setup.sh`](setup.sh):
 
 ```json
 {
