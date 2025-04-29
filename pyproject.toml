@@ -21,6 +21,7 @@ dependencies = [
     "twine>=6.1.0",
 ]
 
+
 [project.urls]
 Homepage = "https://github.com/NomotoK/doris-mcp-server"
 Repository = "https://github.com/NomotoK/doris-mcp-server"
