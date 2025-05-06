@@ -1,4 +1,7 @@
+import sys
+import os
 from doris_mcp_server.mcp_app import mcp
+from doris_mcp_server import config
 from doris_mcp_server.db import tools, DorisConnector
 from doris_mcp_server.res import resources
 from doris_mcp_server.prompts import general_prompts, customize_prompts
@@ -43,6 +46,12 @@ class MCPDorisServer:
 
 
 def main():
+    # 如果提供了命令行参数，则设置为 DORIS_URL
+    if len(sys.argv) > 1:
+        os.environ["DORIS_URL"] = sys.argv[1]
+    
+    config.init_config()
+
     app = MCPDorisServer()
     app.run()
 

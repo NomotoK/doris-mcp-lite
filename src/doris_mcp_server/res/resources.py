@@ -1,6 +1,6 @@
 from doris_mcp_server.mcp_app import mcp
 from doris_mcp_server.db import DorisConnector
-from doris_mcp_server.config import DB_CONFIG
+from doris_mcp_server.config import get_db_config
 from typing import Optional
 
 def _get_table_schemas(db_name: str) -> dict[str, str]:
@@ -63,10 +63,13 @@ def _get_table_comments(db_name: str) -> dict[str, str]:
 
 
 @mcp.resource("doris://schema/{db_name}")
-def all_table_schemas(db_name: str = DB_CONFIG["database"]) -> str:
+def all_table_schemas(db_name: str = None) -> str:
     """
     返回指定数据库下所有表的结构。
     """
+    if db_name is None:
+        db_name = get_db_config()["database"]
+
     schemas = _get_table_schemas(db_name)
 
     content = []
@@ -105,10 +108,12 @@ def table_schema(table: str) -> Optional[str]:
 
 
 @mcp.resource("doris://table-comments/{db_name}")
-def all_table_comments(db_name: str = DB_CONFIG["database"]) -> str:
+def all_table_comments(db_name: str = None) -> str:
     """
     返回指定数据库下所有表的注释信息。
     """
+    if db_name is None:
+        db_name = get_db_config()["database"]
     comments = _get_table_comments(db_name)
     content = []
     for table_name, comment in comments.items():

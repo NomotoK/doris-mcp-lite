@@ -1,25 +1,26 @@
 import pymysql
 from pymysql.cursors import DictCursor
-from doris_mcp_server.config import DB_CONFIG
+from doris_mcp_server.config import get_db_config
 
 
 class DorisConnector:
-    def __init__(self):
+    def __init__(self, config: dict = None):
+        self.config = config or get_db_config()
         self.connection = None
         self._connect()
 
     def _connect(self):
         try:
             self.connection = pymysql.connect(
-                host=DB_CONFIG["host"],
-                port=DB_CONFIG["port"],
-                user=DB_CONFIG["user"],
-                password=DB_CONFIG["password"],
-                database=DB_CONFIG["database"],
+                host=self.config["host"],
+                port=self.config["port"],
+                user=self.config["user"],
+                password=self.config["password"],
+                database=self.config["database"],
                 cursorclass=DictCursor,
                 autocommit=True
             )
-            print(f"[DorisConnector] Connected to {DB_CONFIG['host']}:{DB_CONFIG['port']}")
+            print(f"[DorisConnector] Connected to {self.config['host']}:{self.config['port']}")
         except Exception as e:
             print(f"[DorisConnector] Connection failed: {e}")
             raise
@@ -54,4 +55,4 @@ class DorisConnector:
         """
         sql = f"SHOW TABLES IN {db};"
         result = self.execute_query(sql)
-        return [row[f'Tables_in_{DB_CONFIG["database"]}'] for row in result]
+        return [row[f'Tables_in_{self.config["database"]}'] for row in result]

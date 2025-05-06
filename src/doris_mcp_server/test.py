@@ -4,6 +4,7 @@ import json
 from mcp import ClientSession
 from mcp.client.stdio import stdio_client
 from mcp import StdioServerParameters
+from doris_mcp_server.config import DB_CONFIG, MCP_SERVER_NAME, DEBUG
 
 async def test_resources(session: ClientSession):
     print("== 列出所有资源 ==")
@@ -78,4 +79,5 @@ async def main():
                 await test_prompts(session)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # asyncio.run(main())
+    print(DB_CONFIG["host"],DB_CONFIG["port"],DB_CONFIG["user"],DB_CONFIG["password"],DB_CONFIG["database"])

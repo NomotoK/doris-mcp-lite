@@ -1,7 +1,7 @@
 import re
 from doris_mcp_server.db import DorisConnector
 from doris_mcp_server.mcp_app import mcp
-from doris_mcp_server.config import DB_CONFIG
+from doris_mcp_server.config import get_db_config
 
 
 
@@ -82,10 +82,13 @@ def describe_table(table_name: str) -> str:
 
 
 @mcp.tool(name="list_all_tables")
-def list_all_tables(db_name: str = DB_CONFIG["database"]) -> str:
+def list_all_tables(db_name: str = None) -> str:
     """
     列出当前数据库的所有表。
     """
+    if db_name is None:
+        db_name = get_db_config()["database"]
+
     db = DorisConnector()
     try:
         tables = db.list_tables(db_name)
