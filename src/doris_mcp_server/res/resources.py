@@ -11,8 +11,8 @@ def _get_table_schemas(db_name: str) -> dict[str, str]:
         ...
     }
     """
-    db = DorisConnector()
-    tables = db.list_tables(db_name)
+    with DorisConnector() as db:
+        tables = db.list_tables(db_name)
     result = {}
 
     for table in tables:
@@ -47,14 +47,14 @@ def _get_table_comments(db_name: str) -> dict[str, str]:
         ...
     }
     """
-    db = DorisConnector()
     sql = f"""
     SELECT TABLE_NAME, TABLE_COMMENT
     FROM information_schema.TABLES
     WHERE TABLE_SCHEMA = '{db_name}'
     """
     try:
-        results = db.execute_query(sql)
+        with DorisConnector() as db:
+            results = db.execute_query(sql)
         return {row["TABLE_NAME"]: row["TABLE_COMMENT"] or "无注释" for row in results}
     except Exception as e:
         return {"error": f"无法获取表注释信息: {str(e)}"}
@@ -86,20 +86,20 @@ def table_schema(table: str) -> Optional[str]:
     """
     返回单个表的字段结构信息。
     """
-    db = DorisConnector()
     try:
-        schema = db.get_table_schema(table)
-        if not schema:
-            return f"表 `{table}` 不存在或无结构信息。"
+        with DorisConnector() as db:
+            schema = db.get_table_schema(table)
+            if not schema:
+                return f"表 `{table}` 不存在或无结构信息。"
 
-        headers = ["Field", "Type", "Null", "Key", "Default", "Extra"]
-        lines = [" | ".join(headers)]
-        lines.append("-" * len(lines[0]))
+            headers = ["Field", "Type", "Null", "Key", "Default", "Extra"]
+            lines = [" | ".join(headers)]
+            lines.append("-" * len(lines[0]))
 
-        for row in schema:
-            lines.append(" | ".join(str(row.get(h, "")) for h in headers))
+            for row in schema:
+                lines.append(" | ".join(str(row.get(h, "")) for h in headers))
 
-        return f"# 表: {table}\n" + "\n".join(lines)
+            return f"# 表: {table}\n" + "\n".join(lines)
 
     except Exception as e:
         return f"无法获取表 `{table}` 的结构信息: {str(e)}"
