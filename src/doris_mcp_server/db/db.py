@@ -34,8 +34,12 @@ class DorisConnector:
         self.config = config or get_db_config()
         DorisPool.init_pool(self.config)
 
-    def close(self):
-        print("[DorisConnector] Connection pool does not require manual close.")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass  # No cleanup needed for connection pool
 
     def execute_query(self, sql: str) -> list[dict]:
         try:

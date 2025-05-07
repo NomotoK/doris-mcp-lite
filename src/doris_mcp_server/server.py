@@ -19,13 +19,12 @@ class MCPDorisServer:
         测试数据库连接是否成功。
         """
         try:
-            conn = DorisConnector()
-            result = conn.execute_query("SELECT 1")
-            if result:
-                print("✅ Database connection successful.")
-            else:
-                raise Exception("Database connection test failed: please config .env file.")
-            conn.close()
+            with DorisConnector() as conn:
+                result = conn.execute_query("SELECT 1")
+                if result:
+                    print("✅ Database connection successful.")
+                else:
+                    raise Exception("Database connection test failed: please config .env file.")
         except Exception as e:
             print("❌ Database connection test failed.")
             raise e
