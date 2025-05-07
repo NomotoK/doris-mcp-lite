@@ -1,43 +1,48 @@
 import pymysql
 from pymysql.cursors import DictCursor
 from doris_mcp_server.config import get_db_config
+from dbutils.pooled_db import PooledDB
+class DorisPool:
+    _pool = None
+
+    @classmethod
+    def init_pool(cls, config):
+        if cls._pool is None:
+            cls._pool = PooledDB(
+                creator=pymysql,
+                maxconnections=8,
+                mincached=2,
+                blocking=True,
+                host=config["host"],
+                port=config["port"],
+                user=config["user"],
+                password=config["password"],
+                database=config["database"],
+                cursorclass=DictCursor,
+                autocommit=True
+            )
+
+    @classmethod
+    def get_connection(cls):
+        if cls._pool is None:
+            raise RuntimeError("Connection pool is not initialized")
+        return cls._pool.connection()
 
 
 class DorisConnector:
     def __init__(self, config: dict = None):
         self.config = config or get_db_config()
-        self.connection = None
-        self._connect()
-
-    def _connect(self):
-        try:
-            self.connection = pymysql.connect(
-                host=self.config["host"],
-                port=self.config["port"],
-                user=self.config["user"],
-                password=self.config["password"],
-                database=self.config["database"],
-                cursorclass=DictCursor,
-                autocommit=True
-            )
-            print(f"[DorisConnector] Connected to {self.config['host']}:{self.config['port']}")
-        except Exception as e:
-            print(f"[DorisConnector] Connection failed: {e}")
-            raise
+        DorisPool.init_pool(self.config)
 
     def close(self):
-        if self.connection:
-            self.connection.close()
-            print("[DorisConnector] Connection closed.")
+        print("[DorisConnector] Connection pool does not require manual close.")
 
     def execute_query(self, sql: str) -> list[dict]:
-        if not self.connection:
-            self._connect()
         try:
-            with self.connection.cursor() as cursor:
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                return result
+            with DorisPool.get_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(sql)
+                    return cursor.fetchall()
         except Exception as e:
             print(f"[DorisConnector] Query failed: {e}")
             raise

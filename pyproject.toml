@@ -13,6 +13,7 @@ description = "An MCP server for analytics on Apache Doris database."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "dbutils>=3.1.0",
     "httpx>=0.28.1",
     "mcp[cli]>=1.6.0",
     "pandas>=2.2.3",
