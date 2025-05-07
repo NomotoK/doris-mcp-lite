@@ -1,7 +1,7 @@
 import re
 from doris_mcp_server.db import DorisConnector
 from doris_mcp_server.mcp_app import mcp
-from doris_mcp_server.config import DB_CONFIG
+from doris_mcp_server.config import get_db_config
 
 
 
@@ -23,18 +23,18 @@ def run_select_query(sql: str) -> str:
     if not _is_safe_select(sql):
         return "仅允许只读 SELECT 查询，不支持修改型语句。"
 
-    db = DorisConnector()
     try:
-        rows = db.execute_query(sql)
-        if not rows:
-            return "查询结果为空。"
+        with DorisConnector() as db:
+            rows = db.execute_query(sql)
+            if not rows:
+                return "查询结果为空。"
 
-        headers = rows[0].keys()
-        lines = [" | ".join(headers)]
-        lines.append("-" * len(lines[0]))
-        for row in rows:
-            lines.append(" | ".join(str(row[col]) for col in headers))
-        return "\n".join(lines)
+            headers = rows[0].keys()
+            lines = [" | ".join(headers)]
+            lines.append("-" * len(lines[0]))
+            for row in rows:
+                lines.append(" | ".join(str(row[col]) for col in headers))
+            return "\n".join(lines)
     except Exception as e:
         return f"查询失败: {str(e)}"
 
@@ -59,21 +59,21 @@ def describe_table(table_name: str) -> str:
     """
     返回指定表的字段结构，包括字段名、类型、是否为 null、默认值和注释。
     """
-    db = DorisConnector()
     try:
-        schema = db.get_table_schema(table_name)
-        if not schema:
-            return f"表 `{table_name}` 不存在或无法获取结构信息。"
+        with DorisConnector() as db:
+            schema = db.get_table_schema(table_name)
+            if not schema:
+                return f"表 `{table_name}` 不存在或无法获取结构信息。"
 
-        headers = ["Field", "Type", "Null", "Key", "Default", "Extra"]
-        lines = [" | ".join(headers)]
-        lines.append("-" * len(lines[0]))
+            headers = ["Field", "Type", "Null", "Key", "Default", "Extra"]
+            lines = [" | ".join(headers)]
+            lines.append("-" * len(lines[0]))
 
-        for row in schema:
-            line = " | ".join(str(row.get(h, "")) for h in headers)
-            lines.append(line)
+            for row in schema:
+                line = " | ".join(str(row.get(h, "")) for h in headers)
+                lines.append(line)
 
-        return "\n".join(lines)
+            return "\n".join(lines)
 
     except Exception as e:
         return f"获取表结构失败: {str(e)}"
@@ -82,13 +82,16 @@ def describe_table(table_name: str) -> str:
 
 
 @mcp.tool(name="list_all_tables")
-def list_all_tables(db_name: str = DB_CONFIG["database"]) -> str:
+def list_all_tables(db_name: str = None) -> str:
     """
     列出当前数据库的所有表。
     """
-    db = DorisConnector()
+    if db_name is None:
+        db_name = get_db_config()["database"]
+
     try:
-        tables = db.list_tables(db_name)
-        return "\n".join(tables)
+        with DorisConnector() as db:
+            tables = db.list_tables(db_name)
+            return "\n".join(tables)
     except Exception as e:
         return f"无法获取表列表: {str(e)}"
