@@ -32,6 +32,18 @@ else
     # === 安装或寻找路径 ===
     if [ "$INSTALL_OPTION" == "1" ]; then
         echo ""
+        echo "Do you need to install uv? (y/n)"
+        read -p "Install uv? " INSTALL_UV
+        if [ "$INSTALL_UV" == "y" ]; then
+            echo "📦 Installing uv..."
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+            echo "✅ uv installation complete."
+            export PATH="$HOME/.cargo/bin:$PATH"
+        else
+            echo "⚙️ Skipping uv installation. Assuming uv is already available."
+        fi
+
+        echo ""
         echo "📥 Cloning project from GitHub..."
         git clone "$REPO_URL" "$DEFAULT_CLONE_DIR"
         cd "$DEFAULT_CLONE_DIR"
@@ -78,36 +90,43 @@ else
     echo "✏️ Existing .env found. Will update its contents."
 fi
 
-# === 询问数据库配置信息 ===
 echo ""
-echo "🔧 Please input your Doris database connection information."
+echo "Do you want to configure database connection now?"
+echo "1) Yes, configure now"
+echo "2) No, I will configure later in MCP client"
+read -p "Enter 1 or 2: " DB_CONFIG_OPTION
 
-read -p "DB_HOST (default: localhost): " DB_HOST
-DB_HOST=${DB_HOST:-localhost}
+if [ "$DB_CONFIG_OPTION" == "1" ]; then
+    # === 询问数据库配置信息 ===
+    echo ""
+    echo "🔧 Please input your Doris database connection information."
 
-read -p "DB_PORT (default: 9030): " DB_PORT
-DB_PORT=${DB_PORT:-9030}
+    read -p "DB_HOST (default: localhost): " DB_HOST
+    DB_HOST=${DB_HOST:-localhost}
 
-read -p "DB_USER (default: root): " DB_USER
-DB_USER=${DB_USER:-root}
+    read -p "DB_PORT (default: 9030): " DB_PORT
+    DB_PORT=${DB_PORT:-9030}
 
-read -p "DB_PASSWORD (default: empty): " DB_PASSWORD
-DB_PASSWORD=${DB_PASSWORD:-}
+    read -p "DB_USER (default: root): " DB_USER
+    DB_USER=${DB_USER:-root}
 
-read -p "DB_NAME (e.g., your database name, required): " DB_NAME
-if [ -z "$DB_NAME" ]; then
-    echo "❌ DB_NAME cannot be empty."
-    exit 1
-fi
+    read -p "DB_PASSWORD (default: empty): " DB_PASSWORD
+    DB_PASSWORD=${DB_PASSWORD:-}
 
-read -p "MCP_SERVER_NAME (default: DorisAnalytics): " MCP_SERVER_NAME
-MCP_SERVER_NAME=${MCP_SERVER_NAME:-DorisAnalytics}
+    read -p "DB_NAME (e.g., your database name, required): " DB_NAME
+    if [ -z "$DB_NAME" ]; then
+        echo "❌ DB_NAME cannot be empty."
+        exit 1
+    fi
 
-read -p "Enable DEBUG mode? (true/false, default: true): " DEBUG
-DEBUG=${DEBUG:-true}
+    read -p "MCP_SERVER_NAME (default: DorisAnalytics): " MCP_SERVER_NAME
+    MCP_SERVER_NAME=${MCP_SERVER_NAME:-DorisAnalytics}
 
-# === 写入到 .env文件 ===
-cat > "$ENV_FILE" <<EOL
+    read -p "Enable DEBUG mode? (true/false, default: true): " DEBUG
+    DEBUG=${DEBUG:-true}
+
+    # === 写入到 .env文件 ===
+    cat > "$ENV_FILE" <<EOL
 # 自动生成于 $(date)
 # 数据库连接
 DB_HOST=$DB_HOST
@@ -123,13 +142,30 @@ MCP_SERVER_NAME=$MCP_SERVER_NAME
 DEBUG=$DEBUG
 EOL
 
+else
+    read -p "MCP_SERVER_NAME (default: DorisAnalytics): " MCP_SERVER_NAME
+    MCP_SERVER_NAME=${MCP_SERVER_NAME:-DorisAnalytics}
+
+    read -p "Enable DEBUG mode? (true/false, default: true): " DEBUG
+    DEBUG=${DEBUG:-true}
+
+    cat > "$ENV_FILE" <<EOL
+# 自动生成于 $(date)
+# MCP 服务器名称
+MCP_SERVER_NAME=$MCP_SERVER_NAME
+
+# 其他可能的配置项
+DEBUG=$DEBUG
+EOL
+fi
+
 echo ""
 echo "✅ Successfully updated .env at: $ENV_FILE"
 
 echo ""
 echo "🚀 Setup complete!"
 echo "You can now start the MCP server and test database connection with:"
-echo "   server"
+echo "   server doris://user:pass@localhost:9030/mydb"
 echo "or"
-echo "   python -m doris_mcp_server.server"
+echo "   python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb"
 echo ""

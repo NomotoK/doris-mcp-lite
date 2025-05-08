@@ -14,6 +14,8 @@ Before you start, make sure you have:
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+> [!NOTE]
+> In version 0.0.2, we have added automatic installation of uv in the setup.sh script. You can choose to install uv during installation process. If you have installed uv before, please make sure it is updated to the latest version.
 
 ## **📦 Installation Steps**
 
@@ -69,6 +71,11 @@ Choose installation method:
 2) Already installed manually (pip install or git clone)
 Enter 1 or 2: 1
 
+Do you need to install uv? (y/n): 
+Install uv? y
+📦 Installing uv...
+✅ uv installation complete.
+
 📥 Cloning project from GitHub...
 Cloning into '/Users/hailin/doris-mcp-server'...
 Enter passphrase for key '/Users/hailin/.ssh/id_ed25519': 
@@ -91,6 +98,11 @@ Installed 1 package in 1ms
  ~ doris-mcp-server==0.0.1 (from file:///Users/hailin/doris-mcp-server)
 📋 Copied .env.example to .env
 
+Do you want to configure database connection now?
+1) Yes, configure now
+2) No, I will configure later in MCP client
+Enter 1 or 2: 1
+
 🔧 Please input your Doris database connection information.
 DB_HOST (default: localhost): 127.0.0.1
 DB_PORT (default: 9030): 9030
@@ -104,9 +116,9 @@ Enable DEBUG mode? (true/false, default: true): true
 
 🚀 Setup complete!
 You can now start the MCP server with:
-   server
+   server doris://user:pass@localhost:9030/mydb
 or
-   python -m doris_mcp_server.server
+   python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
 ```
 
 ## **🛠️ What the Script Will Do**
@@ -121,10 +133,10 @@ When you run the script:
     - **Option 2**: Use an existing installation (pip-installed or manually cloned)
 - It will **set up a local virtual environment** and **install dependencies** if needed.
 - It will **locate** or **prompt for** the correct config folder path containing .env.
-- It will **ask you to enter** your **Doris database connection parameters** via command-line prompts.
+- It will **ask you to enter** your **Doris database connection parameters** via command-line prompts. You can also choose to skip any optional parameters.
 - It will **generate or update** the .env file based on your inputs.
 
-✅ If you want to reconfigure your database connection later, simply run bash setup.sh again — it will safely update your .env file.
+✅ If you want to reconfigure your database connection later, simply run `bash setup.sh` again — it will safely update your .env file.
 
 ## **🔧 Database Connection Inputs**
 
