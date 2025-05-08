@@ -81,12 +81,7 @@ Enter 1 or 2: 1
 📥 Cloning project from GitHub...
 Cloning into '/Users/hailin/doris-mcp-server'...
 Enter passphrase for key '/Users/hailin/.ssh/id_ed25519': 
-remote: Enumerating objects: 218, done.
-remote: Counting objects: 100% (218/218), done.
-remote: Compressing objects: 100% (138/138), done.
-remote: Total 218 (delta 102), reused 160 (delta 63), pack-reused 0 (from 0)
-Receiving objects: 100% (218/218), 91.55 KiB | 189.00 KiB/s, done.
-Resolving deltas: 100% (102/102), done.
+
 🔧 Setting up local environment...
 Using CPython 3.12.4 interpreter at: /opt/anaconda3/bin/python3.12
 Creating virtual environment at: .venv
@@ -103,58 +98,7 @@ Installed 1 package in 1ms
 Resolved 59 packages in 853ms
 Prepared 32 packages in 1.83s
 Installed 52 packages in 147ms
- + annotated-types==0.7.0
- + anyio==4.9.0
- + certifi==2025.1.31
- + charset-normalizer==3.4.1
- + click==8.1.8
- + dbutils==3.1.0
- + docutils==0.21.2
- + doris-mcp-server==0.0.2a3 (from file:///Users/hailin/doris-mcp-server)
- + h11==0.16.0
- + httpcore==1.0.9
- + httpx==0.28.1
- + httpx-sse==0.4.0
- + id==1.5.0
- + idna==3.10
- + jaraco-classes==3.4.0
- + jaraco-context==6.0.1
- + jaraco-functools==4.1.0
- + keyring==25.6.0
- + markdown-it-py==3.0.0
- + mcp==1.6.0
- + mdurl==0.1.2
- + more-itertools==10.7.0
- + nh3==0.2.21
- + numpy==2.2.5
- + packaging==25.0
- + pandas==2.2.3
- + pyarrow==19.0.1
- + pydantic==2.11.3
- + pydantic-core==2.33.1
- + pydantic-settings==2.9.1
- + pygments==2.19.1
- + pymysql==1.1.1
- + python-dateutil==2.9.0.post0
- + python-dotenv==1.1.0
- + pytz==2025.2
- + readme-renderer==44.0
- + requests==2.32.3
- + requests-toolbelt==1.0.0
- + rfc3986==2.0.0
- + rich==14.0.0
- + shellingham==1.5.4
- + six==1.17.0
- + sniffio==1.3.1
- + sse-starlette==2.3.3
- + starlette==0.46.2
- + twine==6.1.0
- + typer==0.15.2
- + typing-extensions==4.13.2
- + typing-inspection==0.4.0
- + tzdata==2025.2
- + urllib3==2.4.0
- + uvicorn==0.34.2
+
 📋 Copied .env.example to .env
 
 Do you want to configure database connection now?
@@ -186,6 +130,8 @@ or
 
 When you run the script:
 
+- It will **check your Python version** and ensure it is compatible (3.8+).
+- It will **check if `uv` is installed** and prompt you to install it if not.
 - It **automatically detects** if you are already inside a Doris-MCP-Server project.
 - If not detected, it will prompt you:
     - **Option 1**: Automatically clone and install the server project via GitHub
