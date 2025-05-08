@@ -71,31 +71,90 @@ Choose installation method:
 2) Already installed manually (pip install or git clone)
 Enter 1 or 2: 1
 
-Do you need to install uv? (y/n): 
-Install uv? y
-📦 Installing uv...
-✅ uv installation complete.
+🐍 Checking Python version...
+✅ Python version is 3.12
+🔎 Python executable: /opt/anaconda3/bin/python3
+
+🔍 Checking if 'uv' is installed...
+✅ uv is already installed.
 
 📥 Cloning project from GitHub...
 Cloning into '/Users/hailin/doris-mcp-server'...
 Enter passphrase for key '/Users/hailin/.ssh/id_ed25519': 
-remote: Enumerating objects: 77, done.
-remote: Counting objects: 100% (77/77), done.
-remote: Compressing objects: 100% (57/57), done.
-remote: Total 77 (delta 21), reused 60 (delta 13), pack-reused 0 (from 0)
-Receiving objects: 100% (77/77), 40.71 KiB | 173.00 KiB/s, done.
-Resolving deltas: 100% (21/21), done.
+remote: Enumerating objects: 218, done.
+remote: Counting objects: 100% (218/218), done.
+remote: Compressing objects: 100% (138/138), done.
+remote: Total 218 (delta 102), reused 160 (delta 63), pack-reused 0 (from 0)
+Receiving objects: 100% (218/218), 91.55 KiB | 189.00 KiB/s, done.
+Resolving deltas: 100% (102/102), done.
 🔧 Setting up local environment...
 Using CPython 3.12.4 interpreter at: /opt/anaconda3/bin/python3.12
 Creating virtual environment at: .venv
 Activate with: source .venv/bin/activate
 Using Python 3.12.4 environment at: /opt/anaconda3
-Resolved 34 packages in 1.45s
+Resolved 49 packages in 1.10s
       Built doris-mcp-server @ file:///Users/hailin/doris-mcp-server
-Prepared 1 package in 602ms
+Prepared 1 package in 627ms
 Uninstalled 1 package in 1ms
 Installed 1 package in 1ms
- ~ doris-mcp-server==0.0.1 (from file:///Users/hailin/doris-mcp-server)
+ - doris-mcp-server==0.0.2a2 (from file:///Users/hailin/dev/doris-mcp-server)
+ + doris-mcp-server==0.0.2a3 (from file:///Users/hailin/doris-mcp-server)
+📦 Installing dependencies via uv sync...
+Resolved 59 packages in 853ms
+Prepared 32 packages in 1.83s
+Installed 52 packages in 147ms
+ + annotated-types==0.7.0
+ + anyio==4.9.0
+ + certifi==2025.1.31
+ + charset-normalizer==3.4.1
+ + click==8.1.8
+ + dbutils==3.1.0
+ + docutils==0.21.2
+ + doris-mcp-server==0.0.2a3 (from file:///Users/hailin/doris-mcp-server)
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + httpx-sse==0.4.0
+ + id==1.5.0
+ + idna==3.10
+ + jaraco-classes==3.4.0
+ + jaraco-context==6.0.1
+ + jaraco-functools==4.1.0
+ + keyring==25.6.0
+ + markdown-it-py==3.0.0
+ + mcp==1.6.0
+ + mdurl==0.1.2
+ + more-itertools==10.7.0
+ + nh3==0.2.21
+ + numpy==2.2.5
+ + packaging==25.0
+ + pandas==2.2.3
+ + pyarrow==19.0.1
+ + pydantic==2.11.3
+ + pydantic-core==2.33.1
+ + pydantic-settings==2.9.1
+ + pygments==2.19.1
+ + pymysql==1.1.1
+ + python-dateutil==2.9.0.post0
+ + python-dotenv==1.1.0
+ + pytz==2025.2
+ + readme-renderer==44.0
+ + requests==2.32.3
+ + requests-toolbelt==1.0.0
+ + rfc3986==2.0.0
+ + rich==14.0.0
+ + shellingham==1.5.4
+ + six==1.17.0
+ + sniffio==1.3.1
+ + sse-starlette==2.3.3
+ + starlette==0.46.2
+ + twine==6.1.0
+ + typer==0.15.2
+ + typing-extensions==4.13.2
+ + typing-inspection==0.4.0
+ + tzdata==2025.2
+ + urllib3==2.4.0
+ + uvicorn==0.34.2
 📋 Copied .env.example to .env
 
 Do you want to configure database connection now?
@@ -104,18 +163,18 @@ Do you want to configure database connection now?
 Enter 1 or 2: 1
 
 🔧 Please input your Doris database connection information.
-DB_HOST (default: localhost): 127.0.0.1
+DB_HOST (default: localhost): localhost
 DB_PORT (default: 9030): 9030
-DB_USER (default: root): datacenter
-DB_PASSWORD (default: empty): 1234567890
-DB_NAME (e.g., your database name, required): my_db
-MCP_SERVER_NAME (default: DorisAnalytics): 
-Enable DEBUG mode? (true/false, default: true): true
+DB_USER (default: root): root
+DB_PASSWORD (default: empty): 123456
+DB_NAME (e.g., your database name, required): mydb
+MCP_SERVER_NAME (default: DorisAnalytics): doris_mcp
+Enable DEBUG mode? (true/false, default: true): 
 
 ✅ Successfully updated .env at: /Users/hailin/doris-mcp-server/src/doris_mcp_server/config/.env
 
 🚀 Setup complete!
-You can now start the MCP server with:
+You can now start the MCP server and test database connection with:
    server doris://user:pass@localhost:9030/mydb
 or
    python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
@@ -160,12 +219,12 @@ During setup, you will be asked to provide:
 Once setup is complete, you can start your MCP server:
 
 ```bash
-server
+server doris://user:pass@localhost:9030/mydb
 ```
 
 or:
 ```bash
-python -m doris_mcp_server.server
+python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
 ```
 
 ✅ Your MCP Server will then be available for any MCP-compatible client (e.g., Claude Desktop, Continue, Cline) to connect!
