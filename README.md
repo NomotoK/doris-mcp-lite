@@ -14,6 +14,8 @@ This server enables LLMs and MCP clients to explore database schemas, run read-o
 - Execute **read-only SQL queries** against your Doris database.
 - Perform **data analysis operations** such as retrieving yearly, monthly, and daily usage data.
 - Query metadata such as **database schemas**, **table structures**, and **resource usage**.
+- Connection Pooling: Efficient connection management with pooling to optimize performance.
+- Asynchronous Execution: Support for asynchronous query execution to improve responsiveness.
 
 ### **🧠 Prompts**
 
@@ -49,6 +51,7 @@ chmod +x setup.sh
 ```
 
 The script will automatically install the server and help you walk through database configuration.
+
 ### **Option 2: Install via `pip`**
 
 > **Recommended for production usage**
@@ -93,9 +96,9 @@ uv pip install 'git+https://github.com/YOUR_USERNAME/doris-mcp-server.git'
 
 ## **⚙️ Post-Installation Setup**
 
-### **Step 1: Configure `.env` file**
+### **Step 1: Configure `.env` file (optional)**
 
-Doris-MCP-Server uses .env file to configure database connection info. Please follow these steps to finish configuration:
+Doris-MCP-Server uses .env file to configure database connection info. **This step is not necessary**, you can also configure connection info in your LLM client's mcp config json (See step2). Please follow these steps to finish configuration:
 
 #### **Configure through shell script**
 
@@ -155,6 +158,7 @@ Example if you are using CherryStudio:
 /Users/hailin/dev/Doris-MCP-Server
 run
 server
+doris://user:pass@localhost:9030/mydb
 ```
 
 
@@ -165,7 +169,7 @@ Example if you are installing with pip (`mcp_setting.json`):
   "mcpServers": {
     "DorisAnalytics": {
       "command": "server",
-      "args": [],
+      "args": ["doris://user:pass@localhost:9030/mydb"],
       "transportType": "stdio"
     }
   }
@@ -179,7 +183,7 @@ Alternatively, if you prefer a more robust form:
   "mcpServers": {
     "DorisAnalytics": {
       "command": "python",
-      "args": ["-m", "doris_mcp_server.server"],
+      "args": ["-m", "doris_mcp_server.server","doris://user:pass@localhost:9030/mydb"],
       "transportType": "stdio"
     }
   }
@@ -200,6 +204,7 @@ If you are installing with source code or using [`setup.sh`](setup.sh):
 			"absolute/path/to/mcp/server",
 			"run",
 			"server"
+			"doris://user:pass@localhost:9030/mydb"
 		],
 		"transportType": "stdio"
 		}
@@ -213,7 +218,7 @@ For more information on how to configure your client, please refer to :
 [For Server Developers - Model Context Protocol - Claude](https://modelcontextprotocol.io/quickstart/server)
 
 
-[配置和使用 MCP | CherryStudio](https://docs.cherry-ai.com/advanced-basic/mcp/config)
+[Config and Using MCP | CherryStudio](https://docs.cherry-ai.com/advanced-basic/mcp/config)
 
 ✅ Now your LLM client will discover Doris Analytics tools, prompts, and resources through the MCP server.
 
@@ -237,6 +242,12 @@ or test all the tools provided by the server:
 python test.py --server server.py --test tools
 ```
 
+or test database connection:
+
+```bash
+python test.py --server "doris://user:pass@localhost:9030/mydb" --test dbconfig
+```
+
 or test all functions of resources, tools, and prompt words at one time:
 
 ```bash
@@ -248,13 +259,13 @@ python test.py --server server.py --test all
 Launch the MCP server by running the command:
 
 ```bash
-server
+server doris://user:pass@localhost:9030/mydb
 ```
 
 Or manually:
 
 ```bash
-python -m doris_mcp_server.server
+python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
 ```
 
 The server immediately attempts to connect to the database. If the connection is successful, after startup, you should see:
@@ -293,8 +304,9 @@ src/
 	│   ├── general_prompts.py
 	│   └── customize_prompts.py
 	│
-	├── server.py           # Main entry point to start the MCP server
-	├── mcp_app.py          # MCP object
+	├── __init__.py         # Main entry point to start the MCP server
+	├── server.py           # Server launcher
+	├── mcp_app.py          # MCP server instance
 	└── test.py             # Unit test script
 README.md                   # Documentation
 INSTALL.md                  # Installation guide
