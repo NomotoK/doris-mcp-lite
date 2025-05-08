@@ -66,3 +66,17 @@ def outlier_analysis() -> list[base.Message]:
             "可能使用箱线图或 3σ 原则。"
         ),
     ]
+
+
+# 6. 多轮对话模板：多表联合查询
+@mcp.prompt()
+def multi_table_join_query() -> list[base.Message]:
+    return [
+        base.UserMessage("我想做一个多表联合查询"),
+        base.AssistantMessage("好的，请告诉我涉及哪些表，以及它们之间的关联字段？"),
+        base.UserMessage("比如 user_info 和 user_logs，关联字段是 user_id"),
+        base.AssistantMessage(
+            "明白了，我会生成一个 SQL 来将 `user_info` 表与 `user_logs` 表通过 `user_id` 字段进行关联，"
+            "并可选地限制字段或加上筛选条件。是否有特定字段或条件要查询？"
+        ),
+    ]

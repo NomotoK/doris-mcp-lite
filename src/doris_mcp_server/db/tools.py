@@ -1,4 +1,5 @@
 import re
+from mcp.server.fastmcp import Context
 from doris_mcp_server.db import DorisConnector
 from doris_mcp_server.mcp_app import mcp
 from doris_mcp_server.config import get_db_config
@@ -16,7 +17,7 @@ def _is_safe_select(sql: str) -> bool:
 
 
 @mcp.tool(name="run_select_query",description="run a read-only select query and return formatted result")
-async def run_select_query(sql: str) -> str:
+async def run_select_query(sql: str, ctx: Context) -> str:
     """
     执行只读 SELECT 查询并返回格式化结果。
     """
@@ -32,7 +33,10 @@ async def run_select_query(sql: str) -> str:
             headers = rows[0].keys()
             lines = [" | ".join(headers)]
             lines.append("-" * len(lines[0]))
-            for row in rows:
+
+            total = len(rows)
+            for idx, row in enumerate(rows):
+                await ctx.report_progress(idx + 1, total)
                 lines.append(" | ".join(str(row[col]) for col in headers))
             return "\n".join(lines)
     except Exception as e:
@@ -95,3 +99,4 @@ async def list_all_tables(db_name: str = None) -> str:
             return "\n".join(tables)
     except Exception as e:
         return f"无法获取表列表: {str(e)}"
+    
