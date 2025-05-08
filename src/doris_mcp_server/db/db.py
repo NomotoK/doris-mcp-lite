@@ -70,3 +70,11 @@ class DorisConnector:
         sql = f"SHOW TABLES IN {db};"
         result = await self.execute_query(sql)
         return [row[f'Tables_in_{self.config["database"]}'] for row in result]
+
+    async def list_columns(self, table_name: str) -> list[str]:
+        """
+        获取指定表的所有列名
+        """
+        sql = f"SHOW COLUMNS FROM {table_name};"
+        result = await self.execute_query(sql)
+        return [row['Field'] for row in result]

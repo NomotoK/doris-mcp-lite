@@ -1,4 +1,5 @@
 import re
+from mcp.server.fastmcp import Context
 from doris_mcp_server.db import DorisConnector
 from doris_mcp_server.mcp_app import mcp
 from doris_mcp_server.config import get_db_config
@@ -15,8 +16,8 @@ def _is_safe_select(sql: str) -> bool:
 
 
 
-@mcp.tool(name="run_select_query")
-async def run_select_query(sql: str) -> str:
+@mcp.tool(name="run_select_query",description="run a read-only select query and return formatted result")
+async def run_select_query(sql: str, ctx: Context) -> str:
     """
     执行只读 SELECT 查询并返回格式化结果。
     """
@@ -32,7 +33,10 @@ async def run_select_query(sql: str) -> str:
             headers = rows[0].keys()
             lines = [" | ".join(headers)]
             lines.append("-" * len(lines[0]))
-            for row in rows:
+
+            total = len(rows)
+            for idx, row in enumerate(rows):
+                await ctx.report_progress(idx + 1, total)
                 lines.append(" | ".join(str(row[col]) for col in headers))
             return "\n".join(lines)
     except Exception as e:
@@ -40,7 +44,7 @@ async def run_select_query(sql: str) -> str:
 
 
 
-@mcp.tool(name="preview_table")
+@mcp.tool(name="preview_table",description="preview the first 10 rows of a table")
 async def preview_table(table_name: str) -> str:
     """
     预览指定表前 10 行数据。
@@ -54,7 +58,7 @@ async def preview_table(table_name: str) -> str:
 
 
 
-@mcp.tool(name="describe_table")
+@mcp.tool(name="describe_table",description="return the structure of a table, including field names, types, nullability, default values, and comments")
 async def describe_table(table_name: str) -> str:
     """
     返回指定表的字段结构，包括字段名、类型、是否为 null、默认值和注释。
@@ -81,7 +85,7 @@ async def describe_table(table_name: str) -> str:
 
 
 
-@mcp.tool(name="list_all_tables")
+@mcp.tool(name="list_all_tables",description="list all tables in the current database")
 async def list_all_tables(db_name: str = None) -> str:
     """
     列出当前数据库的所有表。
@@ -95,3 +99,4 @@ async def list_all_tables(db_name: str = None) -> str:
             return "\n".join(tables)
     except Exception as e:
         return f"无法获取表列表: {str(e)}"
+    
