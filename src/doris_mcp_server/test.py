@@ -1,10 +1,13 @@
 import asyncio
 import argparse
 import json
+import urllib.parse
 from mcp import ClientSession
 from mcp.client.stdio import stdio_client
 from mcp import StdioServerParameters
-from doris_mcp_server.config import DB_CONFIG, MCP_SERVER_NAME, DEBUG
+from doris_mcp_server.db import DorisConnector
+from doris_mcp_server.config import *
+
 
 async def test_resources(session: ClientSession):
     print("== 列出所有资源 ==")
@@ -17,6 +20,8 @@ async def test_resources(session: ClientSession):
         uri = resources.resources[0].uri
         content, mime_type = await session.read_resource(uri)
         print(f"内容类型: {mime_type}\n内容预览:\n{content[:500]}...")
+
+
 
 async def test_tools(session: ClientSession):
     print("== 列出所有工具 ==")
@@ -46,6 +51,8 @@ async def test_tools(session: ClientSession):
         result = await session.call_tool(tool.name, arguments=args)
         print(f"返回结果: {result}")
 
+
+
 async def test_prompts(session: ClientSession):
     print("== 列出所有提示词 (prompts) ==")
     prompts = await session.list_prompts()
@@ -59,11 +66,19 @@ async def test_prompts(session: ClientSession):
         print("提示词返回内容:")
         print(response)
 
+
+
+
 async def main():
     parser = argparse.ArgumentParser(description="MCP Server 测试工具")
     parser.add_argument("--server", type=str, required=True, help="Server 启动脚本路径，例如 server.py")
-    parser.add_argument("--test", type=str, required=True, choices=["resources", "tools", "prompts", "all"], help="要测试的功能")
+    parser.add_argument("--test", type=str, required=True, choices=["resources", "tools", "prompts", "all", "dbconfig"], help="要测试的功能")
     args = parser.parse_args()
+
+    # 特殊测试：数据库配置解析
+    if args.test == "dbconfig":
+        test_db_config_from_uri(args.server)
+        return
 
     # 连接到 MCP Server
     server_params = StdioServerParameters(command="python", args=[args.server])
@@ -78,6 +93,32 @@ async def main():
             if args.test in ["prompts", "all"]:
                 await test_prompts(session)
 
+
+def test_db_config_from_uri(uri: str):
+    """
+    解析 URI 并打印对应的数据库配置，并尝试连接数据库
+    """
+    parsed = urllib.parse.urlparse(uri)
+    config = {
+        "host": parsed.hostname,
+        "port": parsed.port,
+        "user": parsed.username,
+        "password": parsed.password,
+        "database": parsed.path.lstrip("/")
+    }
+
+    print("== 数据库连接测试 ==")
+    print("URI:", uri)
+    for key, value in config.items():
+        print(f"{key.capitalize()}: {value}")
+
+    print("尝试连接数据库中...")
+    try:
+        with DorisConnector(config) as connector:
+            result = asyncio.run(connector.execute_query("SELECT 1;"))
+            print("✅ 数据库连接成功，返回结果:", result)
+    except Exception as e:
+        print("❌ 数据库连接失败:", e)
+
 if __name__ == "__main__":
-    # asyncio.run(main())
-    print(DB_CONFIG["host"],DB_CONFIG["port"],DB_CONFIG["user"],DB_CONFIG["password"],DB_CONFIG["database"])
+    asyncio.run(main())
