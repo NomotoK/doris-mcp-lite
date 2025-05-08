@@ -28,7 +28,7 @@ Homepage = "https://github.com/NomotoK/doris-mcp-server"
 Repository = "https://github.com/NomotoK/doris-mcp-server"
 
 [project.scripts]
-server = "doris_mcp_server.server:main"
+server = "doris_mcp_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

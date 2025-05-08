@@ -38,7 +38,7 @@ class MCPDorisServer:
         try:
             print("🚀 Doris MCP Server is starting...")
             await self._test_db_connection()
-            await self.server.run()
+            await self.server.run_stdio_async()
         except Exception as e:
             print("🚨 Doris MCP Server failed to start.")
             print(f"Error: {e}")
@@ -53,5 +53,3 @@ async def main():
 
     server = MCPDorisServer()
     await server.run_async()
-
-
