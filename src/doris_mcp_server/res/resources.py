@@ -107,6 +107,22 @@ async def table_schema(table: str) -> Optional[str]:
     
 
 
+@mcp.resource("doris://table-rowcount/{table}")
+async def get_table_rowcount(table: str) -> str:
+    """
+    返回指定表的行数。
+    """
+    try:
+        async with DorisConnector() as db:
+            sql = f"SELECT COUNT(*) AS row_count FROM {table}"
+            result = await db.execute_query(sql)
+            if result:
+                return f"表 `{table}` 的行数为: {result[0]['row_count']}"
+            else:
+                return f"表 `{table}` 不存在或无法获取行数。"
+    except Exception as e:
+        return f"获取表 `{table}` 行数失败: {str(e)}"
+
 
 @mcp.resource("doris://table-comments/{db_name}")
 async def all_table_comments(db_name: str = None) -> str:

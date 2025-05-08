@@ -1,6 +1,5 @@
 # src/doris_mcp_server/mcp_app.py
 
-# mcp_app.py
 from mcp.server.fastmcp import FastMCP
 from doris_mcp_server.config import MCP_SERVER_NAME
 
