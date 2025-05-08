@@ -16,7 +16,7 @@ def _is_safe_select(sql: str) -> bool:
 
 
 @mcp.tool(name="run_select_query")
-def run_select_query(sql: str) -> str:
+async def run_select_query(sql: str) -> str:
     """
     执行只读 SELECT 查询并返回格式化结果。
     """
@@ -24,8 +24,8 @@ def run_select_query(sql: str) -> str:
         return "仅允许只读 SELECT 查询，不支持修改型语句。"
 
     try:
-        with DorisConnector() as db:
-            rows = db.execute_query(sql)
+        async with DorisConnector() as db:
+            rows = await db.execute_query(sql)
             if not rows:
                 return "查询结果为空。"
 
@@ -41,13 +41,13 @@ def run_select_query(sql: str) -> str:
 
 
 @mcp.tool(name="preview_table")
-def preview_table(table_name: str) -> str:
+async def preview_table(table_name: str) -> str:
     """
     预览指定表前 10 行数据。
     """
     try:
         sql = f"SELECT * FROM {table_name} LIMIT 10;"
-        return run_select_query(sql)
+        return await run_select_query(sql)
     except Exception as e:
         return f"预览失败: {str(e)}"
 
@@ -55,13 +55,13 @@ def preview_table(table_name: str) -> str:
 
 
 @mcp.tool(name="describe_table")
-def describe_table(table_name: str) -> str:
+async def describe_table(table_name: str) -> str:
     """
     返回指定表的字段结构，包括字段名、类型、是否为 null、默认值和注释。
     """
     try:
-        with DorisConnector() as db:
-            schema = db.get_table_schema(table_name)
+        async with DorisConnector() as db:
+            schema = await db.get_table_schema(table_name)
             if not schema:
                 return f"表 `{table_name}` 不存在或无法获取结构信息。"
 
@@ -82,7 +82,7 @@ def describe_table(table_name: str) -> str:
 
 
 @mcp.tool(name="list_all_tables")
-def list_all_tables(db_name: str = None) -> str:
+async def list_all_tables(db_name: str = None) -> str:
     """
     列出当前数据库的所有表。
     """
@@ -90,8 +90,8 @@ def list_all_tables(db_name: str = None) -> str:
         db_name = get_db_config()["database"]
 
     try:
-        with DorisConnector() as db:
-            tables = db.list_tables(db_name)
+        async with DorisConnector() as db:
+            tables = await db.list_tables(db_name)
             return "\n".join(tables)
     except Exception as e:
         return f"无法获取表列表: {str(e)}"

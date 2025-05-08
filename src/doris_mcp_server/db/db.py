@@ -1,3 +1,4 @@
+import asyncio
 import pymysql
 from pymysql.cursors import DictCursor
 from doris_mcp_server.config import get_db_config
@@ -41,27 +42,31 @@ class DorisConnector:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass  # No cleanup needed for connection pool
 
-    def execute_query(self, sql: str) -> list[dict]:
-        try:
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+    async def execute_query(self, sql: str) -> list[dict]:
+        def _run():
             with DorisPool.get_connection() as conn:
                 with conn.cursor() as cursor:
                     cursor.execute(sql)
                     return cursor.fetchall()
-        except Exception as e:
-            print(f"[DorisConnector] Query failed: {e}")
-            raise
+        return await asyncio.to_thread(_run)
 
-    def get_table_schema(self, table_name: str) -> list[dict]:
+    async def get_table_schema(self, table_name: str) -> list[dict]:
         """
         获取指定表的字段信息，包括字段名、类型、是否为空、默认值等
         """
         sql = f"DESCRIBE {table_name};"
-        return self.execute_query(sql)
+        return await self.execute_query(sql)
 
-    def list_tables(self, db: str) -> list[str]:
+    async def list_tables(self, db: str) -> list[str]:
         """
         获取当前数据库中所有表的列表
         """
         sql = f"SHOW TABLES IN {db};"
-        result = self.execute_query(sql)
+        result = await self.execute_query(sql)
         return [row[f'Tables_in_{self.config["database"]}'] for row in result]

@@ -3,7 +3,7 @@ from doris_mcp_server.db import DorisConnector
 from doris_mcp_server.config import get_db_config
 from typing import Optional
 
-def _get_table_schemas(db_name: str) -> dict[str, str]:
+async def _get_table_schemas(db_name: str) -> dict[str, str]:
     """
     获取所有表的结构信息，返回一个字典：
     {
@@ -11,13 +11,14 @@ def _get_table_schemas(db_name: str) -> dict[str, str]:
         ...
     }
     """
-    with DorisConnector() as db:
-        tables = db.list_tables(db_name)
+    async with DorisConnector() as db:
+        tables = await db.list_tables(db_name)
     result = {}
 
     for table in tables:
         try:
-            schema = db.get_table_schema(table)
+            async with DorisConnector() as db:
+                schema = await db.get_table_schema(table)
             if not schema:
                 continue
 
@@ -39,7 +40,7 @@ def _get_table_schemas(db_name: str) -> dict[str, str]:
 
 
 
-def _get_table_comments(db_name: str) -> dict[str, str]:
+async def _get_table_comments(db_name: str) -> dict[str, str]:
     """
     获取所有表的注释信息，返回一个字典：
     {
@@ -53,8 +54,8 @@ def _get_table_comments(db_name: str) -> dict[str, str]:
     WHERE TABLE_SCHEMA = '{db_name}'
     """
     try:
-        with DorisConnector() as db:
-            results = db.execute_query(sql)
+        async with DorisConnector() as db:
+            results = await db.execute_query(sql)
         return {row["TABLE_NAME"]: row["TABLE_COMMENT"] or "无注释" for row in results}
     except Exception as e:
         return {"error": f"无法获取表注释信息: {str(e)}"}
@@ -63,14 +64,14 @@ def _get_table_comments(db_name: str) -> dict[str, str]:
 
 
 @mcp.resource("doris://schema/{db_name}")
-def all_table_schemas(db_name: str = None) -> str:
+async def all_table_schemas(db_name: str = None) -> str:
     """
     返回指定数据库下所有表的结构。
     """
     if db_name is None:
         db_name = get_db_config()["database"]
 
-    schemas = _get_table_schemas(db_name)
+    schemas = await _get_table_schemas(db_name)
 
     content = []
     for table_name, schema_text in schemas.items():
@@ -82,13 +83,13 @@ def all_table_schemas(db_name: str = None) -> str:
 
 
 @mcp.resource("doris://schema/{table}")
-def table_schema(table: str) -> Optional[str]:
+async def table_schema(table: str) -> Optional[str]:
     """
     返回单个表的字段结构信息。
     """
     try:
-        with DorisConnector() as db:
-            schema = db.get_table_schema(table)
+        async with DorisConnector() as db:
+            schema = await db.get_table_schema(table)
             if not schema:
                 return f"表 `{table}` 不存在或无结构信息。"
 
@@ -108,13 +109,13 @@ def table_schema(table: str) -> Optional[str]:
 
 
 @mcp.resource("doris://table-comments/{db_name}")
-def all_table_comments(db_name: str = None) -> str:
+async def all_table_comments(db_name: str = None) -> str:
     """
     返回指定数据库下所有表的注释信息。
     """
     if db_name is None:
         db_name = get_db_config()["database"]
-    comments = _get_table_comments(db_name)
+    comments = await _get_table_comments(db_name)
     content = []
     for table_name, comment in comments.items():
         content.append(f"- {table_name}: {comment}")
