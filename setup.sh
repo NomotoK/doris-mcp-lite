@@ -8,6 +8,16 @@ DEFAULT_CLONE_DIR="$HOME/doris-mcp-server"
 DEFAULT_CONFIG_RELATIVE_PATH="src/doris_mcp_server/config"
 PIP_SITE_PACKAGES="$(python3 -c 'import site; print(site.getsitepackages()[0])')"
 
+# === 检查 Python 版本，确保 >= 3.8 ===
+PYTHON_VERSION_FULL=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+PYTHON_MAJOR=$(echo "$PYTHON_VERSION_FULL" | cut -d. -f1)
+PYTHON_MINOR=$(echo "$PYTHON_VERSION_FULL" | cut -d. -f2)
+
+if [ "$PYTHON_MAJOR" -lt 3 ] || { [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 8 ]; }; then
+    echo "❌ Python >= 3.8 is required. Detected: $PYTHON_VERSION_FULL"
+    exit 1
+fi
+
 # === 检查是否已经在 MCP server 项目根目录 ===
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LOCAL_CONFIG_PATH="$SCRIPT_DIR/src/doris_mcp_server/config"
@@ -32,15 +42,35 @@ else
     # === 安装或寻找路径 ===
     if [ "$INSTALL_OPTION" == "1" ]; then
         echo ""
-        echo "Do you need to install uv? (y/n)"
-        read -p "Install uv? " INSTALL_UV
-        if [ "$INSTALL_UV" == "y" ]; then
-            echo "📦 Installing uv..."
-            curl -LsSf https://astral.sh/uv/install.sh | sh
-            echo "✅ uv installation complete."
-            export PATH="$HOME/.cargo/bin:$PATH"
+        echo "🐍 Checking Python version..."
+        PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+        
+        # 比较python版本
+        if [ "$PYTHON_MAJOR" -lt 3 ] || { [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 8 ]; }; then
+            echo "❌ Python 3.8 or higher is required. Detected version: $PYTHON_VERSION"
+            exit 1
+        fi
+        
+        echo "✅ Python version is $PYTHON_VERSION"
+        echo "🔎 Python executable: $(which python3)"
+
+        echo ""
+        echo "🔍 Checking if 'uv' is installed..."
+        if command -v uv &> /dev/null; then
+            echo "✅ uv is already installed."
+            INSTALL_UV="n"
         else
-            echo "⚙️ Skipping uv installation. Assuming uv is already available."
+            echo "❌ uv is not installed."
+            echo "Do you want to install uv now? (y/n)"
+            read -p "Install uv? " INSTALL_UV
+            if [ "$INSTALL_UV" == "y" ]; then
+                echo "📦 Installing uv..."
+                curl -LsSf https://astral.sh/uv/install.sh | sh
+                echo "✅ uv installation complete."
+                export PATH="$HOME/.cargo/bin:$PATH"
+            else
+                echo "⚠️ uv will not be installed. Make sure it's available in your PATH."
+            fi
         fi
 
         echo ""
@@ -50,6 +80,8 @@ else
         echo "🔧 Setting up local environment..."
         uv venv
         uv pip install -e .
+        echo "📦 Installing dependencies via uv sync..."
+        uv sync
         CONFIG_PATH="$DEFAULT_CLONE_DIR/$DEFAULT_CONFIG_RELATIVE_PATH"
     elif [ "$INSTALL_OPTION" == "2" ]; then
         echo ""
