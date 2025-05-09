@@ -116,7 +116,7 @@ Use the .env file to permanently save your database connection information in th
 
 This is the most recommended and easiest way to setup. Please refer to [Doris MCP install guide](INSTALL.md).
 
-#### **Configure manually in `.env` **
+#### **Configure manually in `.env`**
 
 After installing, navigate to the `doris_mcp_server/config/` directory inside your project directory. If you are using pip, your package will be installed in Python site-packages:
 
