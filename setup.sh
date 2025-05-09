@@ -91,6 +91,13 @@ else
         if [ -d "$PIP_SITE_PACKAGES/doris_mcp_server/config" ]; then
             CONFIG_PATH="$PIP_SITE_PACKAGES/doris_mcp_server/config"
             echo "✅ Found installed package config at: $CONFIG_PATH"
+            echo "🔧 Setting up local environment..."
+            uv venv
+            uv pip install -e .
+            echo "📦 Installing dependencies via uv sync..."
+            uv sync
+            echo "🛠️ Activating venv"
+            source .venv/bin/activate
         else
             echo "⚠️  Cannot automatically find installed config."
             read -p "Please manually input your config directory path (e.g., /absolute/path/to/doris_mcp_server/config): " CONFIG_PATH
