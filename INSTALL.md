@@ -1,6 +1,6 @@
 # **📖 INSTALL.md**
 
-This guide will walk you through how to install **Doris-MCP-Server** using the provided **setup.sh** script, and configure the database connection needed for it to function properly.
+This guide will walk you through how to install **Doris-MCP-Server** using the provided `setup.sh` script, and configure the database connection needed for it to function properly.
 
 ## **🚀 Prerequisites**
 
@@ -15,7 +15,7 @@ Before you start, make sure you have:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 > [!NOTE]
-> In version 0.0.2, we have added automatic installation of uv in the setup.sh script. You can choose to install uv during installation process. If you have installed uv before, please make sure it is updated to the latest version.
+> In version 0.0.2, we have added automatic installation of uv in the `setup.sh` script. You can choose to install uv during installation process. If you have installed uv before, please make sure it is updated to the latest version.
 
 ## **📦 Installation Steps**
 
@@ -58,7 +58,7 @@ bash setup.sh
 
 and then follow the commands.
 
-preview of installation process:
+**A preview of installation process:**
 
 ```bash
 ./setup.sh
@@ -165,11 +165,6 @@ Once setup is complete, you can start your MCP server:
 
 ```bash
 server doris://user:pass@localhost:9030/mydb
-```
-
-or:
-```bash
-python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
 ```
 
 ✅ Your MCP Server will then be available for any MCP-compatible client (e.g., Claude Desktop, Continue, Cline) to connect!

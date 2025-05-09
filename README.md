@@ -210,7 +210,7 @@ If you are installing with source code/uv or using [`setup.sh`](setup.sh):
 
 }
 ```
-Note that you can use `uv` and `server` instead of passing absolute path in config file, but you need to make sure that `uv` is in your PATH.
+Note that you can use `uv` and `server` instead of passing absolute path in config file, but you need to make sure that `uv` is in your `PATH`.
 
 **Connection URL**
 
