@@ -82,6 +82,8 @@ else
         uv pip install -e .
         echo "📦 Installing dependencies via uv sync..."
         uv sync
+        echo "🛠️ Activating venv"
+        source .venv/bin/activate
         CONFIG_PATH="$DEFAULT_CLONE_DIR/$DEFAULT_CONFIG_RELATIVE_PATH"
     elif [ "$INSTALL_OPTION" == "2" ]; then
         echo ""
@@ -198,6 +200,4 @@ echo ""
 echo "🚀 Setup complete!"
 echo "You can now start the MCP server and test database connection with:"
 echo "   server doris://user:pass@localhost:9030/mydb"
-echo "or"
-echo "   python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb"
 echo ""
