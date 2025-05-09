@@ -98,6 +98,7 @@ Installed 1 package in 1ms
 Resolved 59 packages in 853ms
 Prepared 32 packages in 1.83s
 Installed 52 packages in 147ms
+🛠️ Activating venv
 
 📋 Copied .env.example to .env
 
@@ -120,8 +121,6 @@ Enable DEBUG mode? (true/false, default: true):
 🚀 Setup complete!
 You can now start the MCP server and test database connection with:
    server doris://user:pass@localhost:9030/mydb
-or
-   python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
 ```
 
 ## **🛠️ What the Script Will Do**

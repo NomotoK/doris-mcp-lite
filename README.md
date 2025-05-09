@@ -14,12 +14,13 @@ This server enables LLMs and MCP clients to explore database schemas, run read-o
 - Execute **read-only SQL queries** against your Doris database.
 - Perform **data analysis operations** such as retrieving yearly, monthly, and daily usage data.
 - Query metadata such as **database schemas**, **table structures**, and **resource usage**.
-- Connection Pooling: Efficient connection management with pooling to optimize performance.
-- Asynchronous Execution: Support for asynchronous query execution to improve responsiveness.
+- Connection Pooling: Efficient **connection management with pooling** to optimize performance.
+- Asynchronous Execution: Support for **asynchronous query** execution to improve responsiveness.
 
 ### **🧠 Prompts**
 
 - Built-in prompt templates to assist LLMs in asking **analytics questions**.
+- Support for **multi-role prompting** to enhance the interaction between LLMs and the Doris database.
 - Support for **user-defined** and **general-purpose** SQL analysis prompts.
 
 ### **🗂️ Resources**
@@ -33,7 +34,7 @@ We recommend using [uv](https://docs.astral.sh/uv/) to manage your Python enviro
 
 ### **Option 1: Install via shell script**
 
-> **Recommended for server deployment**
+> **Recommended for personal and server deployment**
 
 This is the easiest way to install. Please copy the [`setup.sh`](setup.sh)  file in project and run it locally. For more information please refer: [Doris MCP install guide](INSTALL.md)
 
@@ -76,14 +77,19 @@ cd doris-mcp-server
 1. Set up a local Python environment using [uv](https://github.com/astral-sh/uv):
 
 ```bash
-uv venv
-uv pip install -e .
+uv venv # Create a virtual environment
+uv sync # Install dependencies
+
+# Activate the virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+uv pip install
 ```
 
 1. Add this server to your LLM client or Run the server:
 
 ```bash
-uv run server
+uv run server doris://user:pass@localhost:9030/mydb
 ```
 
 ### **Option 4: Install using uv directly**
@@ -91,20 +97,26 @@ uv run server
 > **For local editable installations**
 
 ```bash
-uv pip install 'git+https://github.com/YOUR_USERNAME/doris-mcp-server.git'
+uv pip install 'git+https://github.com/NomotoK/doris-mcp-server.git'
+uv sync
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+uv pip install -e .
+
+uv run server doris://user:pass@localhost:9030/mydb
 ```
 
 ## **⚙️ Post-Installation Setup**
 
 ### **Step 1: Configure `.env` file (optional)**
 
-Doris-MCP-Server uses .env file to configure database connection info. **This step is not necessary**, you can also configure connection info in your LLM client's mcp config json (See step2). Please follow these steps to finish configuration:
+Use the .env file to permanently save your database connection information in the MCP server, so you do not need to enter the database connection every time you run the MCP server with CLI. Of course, **this step is not necessary**, if you are using a MCP-capatible LLM client, you can also **set up a database connection in the configuration file** of the MCP client later (See step2). Please follow these steps to finish configuration:
 
 #### **Configure through shell script**
 
 This is the most recommended and easiest way to setup. Please refer to [Doris MCP install guide](INSTALL.md).
 
-#### **Configure manually**
+#### **Configure manually in `.env` **
 
 After installing, navigate to the `doris_mcp_server/config/` directory inside your project directory. If you are using pip, your package will be installed in Python site-packages:
 
@@ -176,21 +188,7 @@ Example if you are installing with pip (`mcp_setting.json`):
 }
 ```
 
-Alternatively, if you prefer a more robust form:
-
-```json
-{
-  "mcpServers": {
-    "DorisAnalytics": {
-      "command": "python",
-      "args": ["-m", "doris_mcp_server.server","doris://user:pass@localhost:9030/mydb"],
-      "transportType": "stdio"
-    }
-  }
-}
-```
-
-If you are installing with source code or using [`setup.sh`](setup.sh):
+If you are installing with source code/uv or using [`setup.sh`](setup.sh):
 
 ```json
 {
@@ -212,11 +210,15 @@ If you are installing with source code or using [`setup.sh`](setup.sh):
 
 }
 ```
+Note that you can use `uv` and `server` instead of passing absolute path in config file, but you need to make sure that `uv` is in your PATH.
+
+**Connection URL**
+
+Remember to replace `doris://user:pass@localhost:9030/mydb` with your actual database connection string.
 
 For more information on how to configure your client, please refer to :
 
 [For Server Developers - Model Context Protocol - Claude](https://modelcontextprotocol.io/quickstart/server)
-
 
 [Config and Using MCP | CherryStudio](https://docs.cherry-ai.com/advanced-basic/mcp/config)
 
@@ -226,9 +228,9 @@ For more information on how to configure your client, please refer to :
 
 ## **🖥️ Usage**
 
-### **Testing MCP server**
+### **Testing MCP server (optional)**
 
-Before you start, you can run the `test.py` in the project `src/doris-mcp-server` directory to directly call the MCP Server functional interface to test resources, tools, etc. without using LLM (such as Claude, GPT, etc. models). You can control what functions to test by passing arguments through the command line.
+Before you start, you can run the `test.py` in the project `src/doris-mcp-server` directory to directly call the MCP Server functional interface to test database connection, resources, tools, etc. without using LLM (such as Claude, GPT, etc. models). You can control what functions to test by passing arguments through the command line.
 
 Test all resources exposed by the server:
 
@@ -323,8 +325,10 @@ This project is licensed under the [MIT License](LICENSE).
 ## **🌟Acknowledgements**
 
 - Built using the [MCP Python SDK](https://pypi.org/project/mcp/).
+- Based on: [MCP](https://modelcontextprotocol.io/introduction): The Model Context Protocol, a standard for LLMs to interact with external data sources.
+- [Apache Doris](https://doris.apache.org/): An open-source, high-performance, real-time analytical database.
+- [PyMySQL](https://pypi.org/project/PyMySQL/): A Python MySQL client library for database interaction.
 - Inspired by MCP official examples and best practices.
-
 ---
 
 ## **🤝 Contributions**
