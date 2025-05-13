@@ -178,3 +178,4 @@ cython_debug/
 *.egg-info/
 *.venv/
 *.dist/
+extensions/
