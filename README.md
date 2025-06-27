@@ -1,11 +1,11 @@
-# **📖 Doris-MCP-Server**
+# **📖 Doris-MCP-Lite**
 
 A lightweight **MCP server** designed for connecting to **Apache Doris** or other **MySQL compatible** database schemas, providing tools and prompts for LLM applications.
 
 This server enables LLMs and MCP clients to explore database schemas, run read-only SQL queries, and leverage pre-built analytical prompts — all through a standardized, secure MCP interface.
 
 > [!WARNING]
-> This is an early developer version of doris-mcp-server. Some functions may not operate properly and minor bugs may exist. If you have any quesions, please open an [issue](https://github.com/NomotoK/Doris-MCP-Server/issues).
+> This is an early developer version of doris-mcp-lite. Some functions may not operate properly and minor bugs may exist. If you have any quesions, please open an [issue](https://github.com/NomotoK/Doris-MCP-Lite/issues).
 
 ## **🚀 Features**
 
@@ -58,7 +58,7 @@ The script will automatically install the server and help you walk through datab
 > **Recommended for production usage**
 
 ```bash
-pip install doris-mcp-server
+pip install doris-mcp-lite
 ```
 
 ✅ After installation, the command-line tool server will be available to launch the MCP server.
@@ -70,8 +70,8 @@ pip install doris-mcp-server
 1. Fork and clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/doris-mcp-server.git
-cd doris-mcp-server
+git clone https://github.com/YOUR_USERNAME/doris-mcp-lite.git
+cd doris-mcp-lite
 ```
 
 1. Set up a local Python environment using [uv](https://github.com/astral-sh/uv):
@@ -97,7 +97,7 @@ uv run server doris://user:pass@localhost:9030/mydb
 > **For local editable installations**
 
 ```bash
-uv pip install 'git+https://github.com/NomotoK/doris-mcp-server.git'
+uv pip install 'git+https://github.com/NomotoK/doris-mcp-lite.git'
 uv sync
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
@@ -118,16 +118,16 @@ This is the most recommended and easiest way to setup. Please refer to [Doris MC
 
 #### **Configure manually in `.env`**
 
-After installing, navigate to the `doris_mcp_server/config/` directory inside your project directory. If you are using pip, your package will be installed in Python site-packages:
+After installing, navigate to the `doris_mcp_lite/config/` directory inside your project directory. If you are using pip, your package will be installed in Python site-packages:
 
-- **Mac/Linux:** `/Users/YOUR_USERNAME/.local/lib/python3.x/site-packages/doris_mcp_server/config/`
+- **Mac/Linux:** `/Users/YOUR_USERNAME/.local/lib/python3.x/site-packages/doris_mcp_lite/config/`
 
-- **Windows:** `C:\Users\YOUR_USERNAME\AppData\Local\Programs\Python\Python3x\Lib\site-packages\doris_mcp_server\config\`
+- **Windows:** `C:\Users\YOUR_USERNAME\AppData\Local\Programs\Python\Python3x\Lib\site-packages\doris_mcp_lite\config\`
 
 You can run the following command to locate pip install location:
 
 ```bash
-pip show doris-mcp-server
+pip show doris-mcp-lite
 ```
 
 You will find a `.env.example` file:
@@ -160,14 +160,14 @@ To connect this server to an MCP-compatible client (e.g., Claude Desktop, Cherry
 
 Example if you are using CherryStudio:
 
-- name: doris-mcp-server
+- name: doris-mcp-lite
 - type: stdio
 - command: absolute/path/to/your/uv
 - arguments:
 
 ```bash
 --directory
-/Users/hailin/dev/Doris-MCP-Server
+/Users/hailin/dev/Doris-MCP-Lite
 run
 server
 doris://user:pass@localhost:9030/mydb
@@ -230,7 +230,7 @@ For more information on how to configure your client, please refer to :
 
 ### **Testing MCP server (optional)**
 
-Before you start, you can run the `test.py` in the project `src/doris-mcp-server` directory to directly call the MCP Server functional interface to test database connection, resources, tools, etc. without using LLM (such as Claude, GPT, etc. models). You can control what functions to test by passing arguments through the command line.
+Before you start, you can run the `test.py` in the project `src/doris-mcp-lite` directory to directly call the MCP Server functional interface to test database connection, resources, tools, etc. without using LLM (such as Claude, GPT, etc. models). You can control what functions to test by passing arguments through the command line.
 
 Test all resources exposed by the server:
 
@@ -267,7 +267,7 @@ server doris://user:pass@localhost:9030/mydb
 Or manually:
 
 ```bash
-python -m doris_mcp_server.server doris://user:pass@localhost:9030/mydb
+python -m doris_mcp_lite.server doris://user:pass@localhost:9030/mydb
 ```
 
 The server immediately attempts to connect to the database. If the connection is successful, after startup, you should see:
@@ -285,7 +285,7 @@ You can now use the tools and prompts inside your MCP client.
 
 ```bash
 src/
-└── doris_mcp_server/
+└── doris_mcp_lite/
 	├── config/             # Configuration files
 	│   ├── __init__.py
 	│   ├── config.py       # Loads environment variables

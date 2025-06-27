@@ -7,7 +7,7 @@ name = "Hailin Xie"
 email = "hx101@duke.edu"
 
 [project]
-name = "doris-mcp-server"
+name = "doris-mcp-lite"
 version = "0.0.2"
 description = "An MCP server for analytics on Apache Doris database."
 readme = "README.md"
@@ -24,11 +24,11 @@ dependencies = [
 
 
 [project.urls]
-Homepage = "https://github.com/NomotoK/doris-mcp-server"
-Repository = "https://github.com/NomotoK/doris-mcp-server"
+Homepage = "https://github.com/NomotoK/doris-mcp-lite"
+Repository = "https://github.com/NomotoK/doris-mcp-lite"
 
 [project.scripts]
-server = "doris_mcp_server:main"
+server = "doris_mcp_lite:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -163,7 +163,7 @@ wheels = [
 ]
 
 [[package]]
-name = "doris-mcp-server"
+name = "doris-mcp-lite"
 version = "0.0.2"
 source = { editable = "." }
 dependencies = [

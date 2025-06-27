@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # === 基本参数 ===
-REPO_URL="git@github.com:NomotoK/doris-mcp-server.git"
-DEFAULT_CLONE_DIR="$HOME/doris-mcp-server"
-DEFAULT_CONFIG_RELATIVE_PATH="src/doris_mcp_server/config"
+REPO_URL="git@github.com:NomotoK/doris-mcp-lite.git"
+DEFAULT_CLONE_DIR="$HOME/doris-mcp-lite"
+DEFAULT_CONFIG_RELATIVE_PATH="src/doris_mcp_lite/config"
 PIP_SITE_PACKAGES="$(python3 -c 'import site; print(site.getsitepackages()[0])')"
 
 # === 检查 Python 版本，确保 >= 3.8 ===
@@ -20,7 +20,7 @@ fi
 
 # === 检查是否已经在 MCP server 项目根目录 ===
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LOCAL_CONFIG_PATH="$SCRIPT_DIR/src/doris_mcp_server/config"
+LOCAL_CONFIG_PATH="$SCRIPT_DIR/src/doris_mcp_lite/config"
 
 if [ -d "$LOCAL_CONFIG_PATH" ]; then
     echo "✅ Detected existing MCP server project at: $SCRIPT_DIR"
@@ -28,7 +28,7 @@ if [ -d "$LOCAL_CONFIG_PATH" ]; then
 else
     # === 欢迎界面 ===
     echo "-------------------------------------------"
-    echo "🚀 Welcome to Doris-MCP-Server Setup Wizard"
+    echo "🚀 Welcome to Doris-MCP-Lite Setup Wizard"
     echo "-------------------------------------------"
     echo ""
 
@@ -88,8 +88,8 @@ else
     elif [ "$INSTALL_OPTION" == "2" ]; then
         echo ""
         echo "🔍 Attempting to locate existing installation..."
-        if [ -d "$PIP_SITE_PACKAGES/doris_mcp_server/config" ]; then
-            CONFIG_PATH="$PIP_SITE_PACKAGES/doris_mcp_server/config"
+        if [ -d "$PIP_SITE_PACKAGES/doris_mcp_lite/config" ]; then
+            CONFIG_PATH="$PIP_SITE_PACKAGES/doris_mcp_lite/config"
             echo "✅ Found installed package config at: $CONFIG_PATH"
             echo "🔧 Setting up local environment..."
             uv venv
@@ -100,7 +100,7 @@ else
             source .venv/bin/activate
         else
             echo "⚠️  Cannot automatically find installed config."
-            read -p "Please manually input your config directory path (e.g., /absolute/path/to/doris_mcp_server/config): " CONFIG_PATH
+            read -p "Please manually input your config directory path (e.g., /absolute/path/to/doris_mcp_lite/config): " CONFIG_PATH
         fi
     else
         echo "❌ Invalid input. Please restart the script and enter 1 or 2."

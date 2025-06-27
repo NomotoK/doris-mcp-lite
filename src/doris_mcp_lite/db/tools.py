@@ -1,8 +1,8 @@
 import re
 from mcp.server.fastmcp import Context
-from doris_mcp_server.db import DorisConnector
-from doris_mcp_server.mcp_app import mcp
-from doris_mcp_server.config import get_db_config
+from doris_mcp_lite.db import DorisConnector
+from doris_mcp_lite.mcp_app import mcp
+from doris_mcp_lite.config import get_db_config
 
 
 

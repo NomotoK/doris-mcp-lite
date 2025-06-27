@@ -1,6 +1,6 @@
 # **📖 INSTALL.md**
 
-This guide will walk you through how to install **Doris-MCP-Server** using the provided `setup.sh` script, and configure the database connection needed for it to function properly.
+This guide will walk you through how to install **Doris-MCP-Lite** using the provided `setup.sh` script, and configure the database connection needed for it to function properly.
 
 ## **🚀 Prerequisites**
 
@@ -44,8 +44,8 @@ The script will automatically install the server and help you walk through datab
 If you have not already cloned the repository, you can clone it via:
 
 ```bash
-git clone git@github.com:NomotoK/doris-mcp-server.git
-cd doris-mcp-server
+git clone git@github.com:NomotoK/doris-mcp-lite.git
+cd doris-mcp-lite
 ```
 
 2. **Run the installation and setup script**
@@ -63,7 +63,7 @@ and then follow the commands.
 ```bash
 ./setup.sh
 -------------------------------------------
-🚀 Welcome to Doris-MCP-Server Setup Wizard
+🚀 Welcome to Doris-MCP-Lite Setup Wizard
 -------------------------------------------
 
 Choose installation method:
@@ -79,7 +79,7 @@ Enter 1 or 2: 1
 ✅ uv is already installed.
 
 📥 Cloning project from GitHub...
-Cloning into '/Users/hailin/doris-mcp-server'...
+Cloning into '/Users/hailin/doris-mcp-lite'...
 Enter passphrase for key '/Users/hailin/.ssh/id_ed25519': 
 
 🔧 Setting up local environment...
@@ -88,12 +88,12 @@ Creating virtual environment at: .venv
 Activate with: source .venv/bin/activate
 Using Python 3.12.4 environment at: /opt/anaconda3
 Resolved 49 packages in 1.10s
-      Built doris-mcp-server @ file:///Users/hailin/doris-mcp-server
+      Built doris-mcp-lite @ file:///Users/hailin/doris-mcp-lite
 Prepared 1 package in 627ms
 Uninstalled 1 package in 1ms
 Installed 1 package in 1ms
- - doris-mcp-server==0.0.2a2 (from file:///Users/hailin/dev/doris-mcp-server)
- + doris-mcp-server==0.0.2a3 (from file:///Users/hailin/doris-mcp-server)
+ - doris-mcp-lite==0.0.2a2 (from file:///Users/hailin/dev/doris-mcp-lite)
+ + doris-mcp-lite==0.0.2a3 (from file:///Users/hailin/doris-mcp-lite)
 📦 Installing dependencies via uv sync...
 Resolved 59 packages in 853ms
 Prepared 32 packages in 1.83s
@@ -116,7 +116,7 @@ DB_NAME (e.g., your database name, required): mydb
 MCP_SERVER_NAME (default: DorisAnalytics): doris_mcp
 Enable DEBUG mode? (true/false, default: true): 
 
-✅ Successfully updated .env at: /Users/hailin/doris-mcp-server/src/doris_mcp_server/config/.env
+✅ Successfully updated .env at: /Users/hailin/doris-mcp-lite/src/doris_mcp_lite/config/.env
 
 🚀 Setup complete!
 You can now start the MCP server and test database connection with:
@@ -131,7 +131,7 @@ When you run the script:
 
 - It will **check your Python version** and ensure it is compatible (3.8+).
 - It will **check if `uv` is installed** and prompt you to install it if not.
-- It **automatically detects** if you are already inside a Doris-MCP-Server project.
+- It **automatically detects** if you are already inside a Doris-MCP-Lite project.
 - If not detected, it will prompt you:
     - **Option 1**: Automatically clone and install the server project via GitHub
     - **Option 2**: Use an existing installation (pip-installed or manually cloned)
@@ -182,16 +182,16 @@ and input the correct connection details. It will **safely overwrite** the old .
 
 ### **What if the script can’t find my existing installation?**
 
-If automatic detection fails, the script will prompt you to **manually input** the full path to your `doris_mcp_server/config `folder.
+If automatic detection fails, the script will prompt you to **manually input** the full path to your `doris_mcp_lite/config `folder.
 
 Example:
 ```bash
-/Users/yourname/.local/lib/python3.11/site-packages/doris_mcp_server/config
+/Users/yourname/.local/lib/python3.11/site-packages/doris_mcp_lite/config
 ```
 
 or
 ```bash
-/your/path/to/doris-mcp-server/src/doris_mcp_server/config
+/your/path/to/doris-mcp-lite/src/doris_mcp_lite/config
 ```
 
 ## **📢 Important Notes**

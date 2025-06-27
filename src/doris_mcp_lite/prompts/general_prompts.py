@@ -1,4 +1,4 @@
-from doris_mcp_server.mcp_app import mcp
+from doris_mcp_lite.mcp_app import mcp
 from mcp.server.fastmcp.prompts import base
 
 

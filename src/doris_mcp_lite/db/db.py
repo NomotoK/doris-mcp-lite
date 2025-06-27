@@ -1,7 +1,7 @@
 import asyncio
 import pymysql
 from pymysql.cursors import DictCursor
-from doris_mcp_server.config import get_db_config
+from doris_mcp_lite.config import get_db_config
 from dbutils.pooled_db import PooledDB
 class DorisPool:
     _pool = None
