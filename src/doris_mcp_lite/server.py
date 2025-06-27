@@ -1,12 +1,12 @@
 import os
 import sys
 import asyncio
-from doris_mcp_server import config
-from doris_mcp_server.mcp_app import mcp
-from doris_mcp_server import config
-from doris_mcp_server.db import tools, DorisConnector
-from doris_mcp_server.res import resources
-from doris_mcp_server.prompts import general_prompts, customize_prompts
+from doris_mcp_lite import config
+from doris_mcp_lite.mcp_app import mcp
+from doris_mcp_lite import config
+from doris_mcp_lite.db import tools, DorisConnector
+from doris_mcp_lite.res import resources
+from doris_mcp_lite.prompts import general_prompts, customize_prompts
 import traceback
 
 class MCPDorisServer:

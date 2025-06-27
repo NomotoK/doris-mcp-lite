@@ -5,8 +5,8 @@ import urllib.parse
 from mcp import ClientSession
 from mcp.client.stdio import stdio_client
 from mcp import StdioServerParameters
-from doris_mcp_server.db import DorisConnector
-from doris_mcp_server.config import *
+from doris_mcp_lite.db import DorisConnector
+from doris_mcp_lite.config import *
 
 
 async def test_resources(session: ClientSession):

@@ -163,8 +163,8 @@ wheels = [
 ]
 
 [[package]]
-name = "doris-mcp-server"
-version = "0.0.2b1"
+name = "doris-mcp-lite"
+version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "dbutils" },

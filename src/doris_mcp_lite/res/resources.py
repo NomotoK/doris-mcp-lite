@@ -1,6 +1,6 @@
-from doris_mcp_server.mcp_app import mcp
-from doris_mcp_server.db import DorisConnector
-from doris_mcp_server.config import get_db_config
+from doris_mcp_lite.mcp_app import mcp
+from doris_mcp_lite.db import DorisConnector
+from doris_mcp_lite.config import get_db_config
 from typing import Optional
 
 async def _get_table_schemas(db_name: str) -> dict[str, str]:

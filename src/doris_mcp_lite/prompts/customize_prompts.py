@@ -1,4 +1,4 @@
-from doris_mcp_server.mcp_app import mcp
+from doris_mcp_lite.mcp_app import mcp
 
 # 1. 自定义数据预处理提示
 @mcp.prompt()
