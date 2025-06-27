@@ -8,7 +8,7 @@ email = "hx101@duke.edu"
 
 [project]
 name = "doris-mcp-lite"
-version = "0.0.2"
+version = "0.0.3"
 description = "An MCP server for analytics on Apache Doris database."
 readme = "README.md"
 requires-python = ">=3.12"
