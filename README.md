@@ -6,6 +6,7 @@ This server enables LLMs and MCP clients to explore database schemas, run read-o
 
 > [!WARNING]
 > This is an early developer version of doris-mcp-lite. Some functions may not operate properly and minor bugs may exist. If you have any quesions, please open an [issue](https://github.com/NomotoK/Doris-MCP-Lite/issues).
+> The official Apache Doris MCP server is available at [apache/doris-mcp-server](https://github.com/apache/doris-mcp-server)
 
 ## **🚀 Features**
 
@@ -327,6 +328,7 @@ This project is licensed under the [MIT License](LICENSE).
 - Built using the [MCP Python SDK](https://pypi.org/project/mcp/).
 - Based on: [MCP](https://modelcontextprotocol.io/introduction): The Model Context Protocol, a standard for LLMs to interact with external data sources.
 - [Apache Doris](https://doris.apache.org/): An open-source, high-performance, real-time analytical database.
+- [Apache Doris Official MCP Server](https://github.com/apache/doris-mcp-server): The official MCP server for Apache Doris.
 - [PyMySQL](https://pypi.org/project/PyMySQL/): A Python MySQL client library for database interaction.
 - Inspired by MCP official examples and best practices.
 ---
